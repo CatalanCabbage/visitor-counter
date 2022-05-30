@@ -13,8 +13,9 @@ module.exports = async (req, res) => {
 	}
 
 	if (path === '/visitors' && method === 'GET') {
-		let numberOfVisitors = await getNumberOfVisitors(catalystApp);
-		incrementVisitors(catalystApp);
+		let numberOfVisitorsData = await getNumberOfVisitors(catalystApp);
+		let numberOfVisitors = numberOfVisitorsData.value;
+		incrementVisitors(catalystApp, numberOfVisitorsData);
 		res.writeHead(200, { 'Content-Type': 'application/json' });
 		res.write(JSON.stringify({
 			'visitors': numberOfVisitors
@@ -44,18 +45,18 @@ module.exports = async (req, res) => {
 	res.end();
 };
 
-function incrementVisitors(catalystApp) {
-	var rowData = {}
-	rowData.param_key = 'numberOfViews';
+function incrementVisitors(catalystApp, rowId) {
+	let updatedRowData = {
+        'ROWID': rowId,
+		'param_value': 1 + Number(numberOfVisitorsData) 
+    };
 
-	var rowArr = [];
-	rowArr.push(rowData);
-	// Inserts a row in the Catalyst Data Store table
-	catalystApp.datastore().table(systemParams).insertRows(rowArr).then(insertResponse => {
-		console.log(insertResponse);
-	}).catch(err => {
-		console.log(err);
-	})
+	let datastore = catalystApp.datastore();
+    let table = datastore.table('systemParams');
+    let rowPromise = table.updateRow(updatedRowData);
+	rowPromise.then((row) => {
+		console.log(row);
+	});
 }
 
 
@@ -64,10 +65,13 @@ async function getNumberOfVisitors(catalystApp) {
 		let tableName = 'systemParams';
 		let columnName = 'param_key';
 		// Queries the Catalyst Data Store table
-		catalystApp.zcql().executeZCQLQuery("SELECT param_key, param_value FROM systemParams WHERE param_key='numberOfViews'")
+		catalystApp.zcql().executeZCQLQuery("SELECT ROWID, param_key, param_value FROM systemParams WHERE param_key='numberOfViews'")
 			.then(queryResponse => {
 				console.log(queryResponse);
-				resolve(queryResponse[0].systemParams.param_value);
+				resolve({
+					'value' : queryResponse[0].systemParams.param_value,
+					'ROWID' : queryResponse[0].systemParams.ROWID
+				});
 			}).catch(err => {
 				reject(err);
 			})
