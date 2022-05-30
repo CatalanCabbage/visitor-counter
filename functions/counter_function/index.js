@@ -3,7 +3,7 @@
 let catalyst = require('zcatalyst-sdk-node');
 
 let numberOfVisitors = 1;
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
 	var catalystApp = catalyst.initialize(req);
 	let urlObject = new URL(req.url, `http://${req.host}`);
 	let path = urlObject.pathname;
