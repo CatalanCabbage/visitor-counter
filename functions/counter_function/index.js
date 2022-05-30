@@ -2,12 +2,13 @@
 
 let numberOfVisitors = 1;
 module.exports = (req, res) => {
-	var url = req.url;
+	let url = req.url;
+	let method = req.method;
 	let errorMessages = {
 		404 : 'URL not found'
 	}
 
-	if (url === '/visitors' && req.method === 'GET') {
+	if (url === '/visitors' && method === 'GET') {
 		incrementVisitors();
 		res.writeHead(200, { 'Content-Type': 'application/json' });
 		res.write(JSON.stringify({
@@ -15,7 +16,7 @@ module.exports = (req, res) => {
 		}));
 		res.end();
 		return;
-	} else if (url === '/visitors' && req.method === 'PUT') {
+	} else if (url === '/visitors' && method === 'PUT') {
 		let secretKey = req.query.secretKey;
 		if (secretKey === 'sudo') {
 			let newCount = req.query.newCount;
@@ -30,7 +31,7 @@ module.exports = (req, res) => {
 	}
 	
 	res.writeHead(404, { 'Content-Type': 'application/json' });
-	res.write( JSON.stringify({ 'status' : errorMessages[404], 'url' : url, 'method' : url.method }));
+	res.write( JSON.stringify({ 'status' : errorMessages[404], 'url' : url, 'method' : method }));
 	res.end();
 };
 
