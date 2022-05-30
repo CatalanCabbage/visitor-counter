@@ -1,0 +1,9 @@
+{
+  "functions": {
+    "targets": [
+      "counter_function"
+    ],
+    "ignore": [],
+    "source": "functions"
+  }
+}

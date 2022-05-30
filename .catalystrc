@@ -1,0 +1,36 @@
+{
+  "defaults": {
+    "project": 1,
+    "env": 1
+  },
+  "actives": {
+    "project": 1,
+    "env": 1
+  },
+  "projects": [
+    {
+      "idx": 1,
+      "id": "1806000000027001",
+      "name": "counter",
+      "domain": {
+        "id": "10043030647",
+        "name": "counter-698797005.development"
+      },
+      "env": [
+        {
+          "idx": 1,
+          "id": "698797005",
+          "name": "Development",
+          "type": 3,
+          "env_status": "Active",
+          "project_details": {
+            "project_name": "counter",
+            "id": "1806000000027001",
+            "project_type": "Live"
+          },
+          "is_default": true
+        }
+      ]
+    }
+  ]
+}
