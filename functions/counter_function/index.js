@@ -55,10 +55,10 @@ async function getNumberOfVisitors(catalystApp) {
 		let tableName = 'systemParams';
 		let columnName = 'param_key';
 		// Queries the Catalyst Data Store table
-		catalystApp.zcql().executeZCQLQuery("SELECT * FROM systemParams")
+		catalystApp.zcql().executeZCQLQuery("SELECT param_key, param_value FROM systemParams WHERE param_key='numberOfViews'")
 			.then(queryResponse => {
 				console.log(queryResponse);
-				resolve(queryResponse);
+				resolve(queryResponse[0].systemParams.param_value);
 			}).catch(err => {
 				reject(err);
 		})
