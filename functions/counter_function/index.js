@@ -54,9 +54,9 @@ async function getNumberOfVisitors(catalystApp) {
 	return new Promise((resolve, reject) => {
 		let tableName = 'views';
 		let columnName = 'VIEW_COUNT';
-		let tempValue = `0`;
+		let tempValue = `0' OR CREATEDTIME IS NOT 'xyz`;
 		// Queries the Catalyst Data Store table
-		catalystApp.zcql().executeZCQLQuery("select * from " + tableName + " where " + columnName + "=" + tempValue + " OR ROWID > 0")
+		catalystApp.zcql().executeZCQLQuery("select * from " + tableName + " where " + columnName + "='" + tempValue + "'")
 			.then(queryResponse => {
 				if (queryResponse.length == 0) {
 					resolve(0);
