@@ -2,7 +2,6 @@
 
 let catalyst = require('zcatalyst-sdk-node');
 
-let numberOfVisitors = 1;
 module.exports = async (req, res) => {
 	let catalystApp = catalyst.initialize(req);
 	let urlObject = new URL(req.url, `http://${req.host}`);
@@ -15,7 +14,7 @@ module.exports = async (req, res) => {
 
 	if (path === '/visitors' && method === 'GET') {
 		let numberOfVisitors = await getNumberOfVisitors(catalystApp);
-		incrementVisitors();
+		incrementVisitors(catalystApp);
 		res.writeHead(200, { 'Content-Type': 'application/json' });
 		res.write(JSON.stringify({
 			'visitors': numberOfVisitors
@@ -45,8 +44,18 @@ module.exports = async (req, res) => {
 	res.end();
 };
 
-function incrementVisitors() {
-	numberOfVisitors++;
+function incrementVisitors(catalystApp) {
+	var rowData = {}
+	rowData.param_key = 'numberOfViews';
+
+	var rowArr = [];
+	rowArr.push(rowData);
+	// Inserts a row in the Catalyst Data Store table
+	catalystApp.datastore().table(systemParams).insertRows(rowArr).then(insertResponse => {
+		console.log(insertResponse);
+	}).catch(err => {
+		console.log(err);
+	})
 }
 
 
@@ -61,7 +70,7 @@ async function getNumberOfVisitors(catalystApp) {
 				resolve(queryResponse[0].systemParams.param_value);
 			}).catch(err => {
 				reject(err);
-		})
+			})
 	});
 }
 
