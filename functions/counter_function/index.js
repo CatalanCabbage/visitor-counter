@@ -4,7 +4,7 @@ let catalyst = require('zcatalyst-sdk-node');
 
 let numberOfVisitors = 1;
 module.exports = async (req, res) => {
-	var catalystApp = catalyst.initialize(req);
+	let catalystApp = catalyst.initialize(req);
 	let urlObject = new URL(req.url, `http://${req.host}`);
 	let path = urlObject.pathname;
 	let method = req.method;
@@ -65,13 +65,13 @@ async function getNumberOfVisitors(catalystApp) {
 	});
 }
 
-// Queries the Catalyst Data Store table and checks whether a row is present
-getNumberOfVisitors(catalystApp).then(data => {
-	if (data.length == 0) {
-		return 0;
-	} else {
-		return 100;
-	}
-}).catch(err => {
-	return null;
-});
+// // Queries the Catalyst Data Store table and checks whether a row is present
+// getNumberOfVisitors(catalystApp).then(data => {
+// 	if (data.length == 0) {
+// 		return 0;
+// 	} else {
+// 		return 100;
+// 	}
+// }).catch(err => {
+// 	return null;
+// });
