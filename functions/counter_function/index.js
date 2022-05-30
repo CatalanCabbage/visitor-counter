@@ -36,8 +36,7 @@ module.exports = (req, res) => {
 	res.write( JSON.stringify({ 
 		'status' : errorMessages[404], 
 		'path' : path, 
-		'method' : method,
-		'queryParams' : queryParams	
+		'method' : method
 	}));
 	res.end();
 };
