@@ -7,12 +7,21 @@ module.exports = (req, res) => {
 	}
 	let numberOfVisitors = 1;
 
+	res.writeHead(200, { 'Content-Type': 'application/json' });
+	res.write(JSON.stringify({
+		'url' : url,
+		'mode' : req.mode
+	}));
+	res.end();
+	return;
+
 	if (url === '/visitors' && req.mode === 'GET') {
 		incrementVisitors();
 		res.writeHead(200, { 'Content-Type': 'application/json' });
 		res.write(JSON.stringify({
 			'visitors' : numberOfVisitors
 		}));
+		res.end();
 		return;
 	} else if (url === '/visitors' && req.mode === 'PUT') {
 		let secretKey = req.query.secretKey;
@@ -23,8 +32,9 @@ module.exports = (req, res) => {
 			res.write(JSON.stringify({
 				'visitors' : numberOfVisitors
 			}));
+			res.end();
+			return;
 		}
-		return;
 	}
 	
 	res.writeHead(404, { 'Content-Type': 'application/json' });
