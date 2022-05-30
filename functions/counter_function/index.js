@@ -7,16 +7,7 @@ module.exports = (req, res) => {
 	}
 	let numberOfVisitors = 1;
 
-	res.writeHead(200, { 'Content-Type': 'application/json' });
-	res.write(JSON.stringify({
-		'url' : url,
-		'mode' : req.mode || 'no mode',
-		'method' : req.method
-	}));
-	res.end();
-	return;
-
-	if (url === '/visitors' && req.mode === 'GET') {
+	if (url === '/visitors' && req.method === 'GET') {
 		incrementVisitors();
 		res.writeHead(200, { 'Content-Type': 'application/json' });
 		res.write(JSON.stringify({
@@ -24,7 +15,7 @@ module.exports = (req, res) => {
 		}));
 		res.end();
 		return;
-	} else if (url === '/visitors' && req.mode === 'PUT') {
+	} else if (url === '/visitors' && req.method === 'PUT') {
 		let secretKey = req.query.secretKey;
 		if (secretKey === 'sudo') {
 			let newCount = req.query.newCount;
