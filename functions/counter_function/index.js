@@ -2,7 +2,7 @@
 
 let numberOfVisitors = 1;
 module.exports = (req, res) => {
-	let urlObject = new URL(req.url, `http://${request.getHeaders().host}`);
+	let urlObject = new URL(req.url, `http://${req.getHeaders().host}`);
 	let path = urlObject.pathname;
 	let method = req.method;
 	let errorMessages = {
