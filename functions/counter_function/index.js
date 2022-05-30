@@ -58,12 +58,7 @@ async function getNumberOfVisitors(catalystApp) {
 		catalystApp.zcql().executeZCQLQuery("select " + columnName + " from " + tableName)
 			.then(queryResponse => {
 				console.log(queryResponse);
-				if (queryResponse.length == 0) {
-					resolve(0);
-				} else {
-					//resolve(queryResponse);
-					resolve(999);
-				}
+				resolve(queryResponse);
 			}).catch(err => {
 				reject(err);
 		})
