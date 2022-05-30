@@ -30,7 +30,7 @@ module.exports = (req, res) => {
 	}
 	
 	res.writeHead(404, { 'Content-Type': 'application/json' });
-	res.write( JSON.stringify({ 'status' : errorMessages[404]}) );
+	res.write( JSON.stringify({ 'status' : errorMessages[404], 'url' : url, 'method' : url.method }));
 	res.end();
 };
 
