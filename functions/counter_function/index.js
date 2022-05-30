@@ -36,7 +36,7 @@ module.exports = (req, res) => {
 		'url' : url, 
 		'method' : method, 
 		'path' : req.path || 'no path', 
-		'req' : req 
+		'req' : JSON.stringify(req) 
 	}));
 	res.end();
 };
