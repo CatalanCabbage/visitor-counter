@@ -46,10 +46,11 @@ module.exports = async (req, res) => {
 };
 
 function incrementVisitors(catalystApp, numberOfVisitorsData) {
-	console.log(numberOfVisitorsData.rowId);
+	console.log(numberOfVisitorsData.ROWID);
+	let newVisitorCount = numberOfVisitorsData.value;
 	let updatedRowData = {
-        'ROWID': numberOfVisitorsData.rowId,
-		'param_value': (1 + Number(numberOfVisitorsData.value)) 
+        'ROWID': numberOfVisitorsData.ROWID,
+		'param_value': newVisitorCount
     };
 
 	let datastore = catalystApp.datastore();
