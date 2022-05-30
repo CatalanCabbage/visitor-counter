@@ -10,7 +10,8 @@ module.exports = (req, res) => {
 	res.writeHead(200, { 'Content-Type': 'application/json' });
 	res.write(JSON.stringify({
 		'url' : url,
-		'mode' : req.mode
+		'mode' : req.mode || 'no mode',
+		'method' : req.method
 	}));
 	res.end();
 	return;
