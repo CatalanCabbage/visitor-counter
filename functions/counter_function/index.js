@@ -52,10 +52,10 @@ function incrementVisitors() {
 
 async function getNumberOfVisitors(catalystApp) {
 	return new Promise((resolve, reject) => {
-		let tableName = 'views';
-		let columnName = 'VIEW_COUNT';
+		let tableName = 'systemParams';
+		let columnName = 'param_keys';
 		// Queries the Catalyst Data Store table
-		catalystApp.zcql().executeZCQLQuery("select " + columnName + " from " + tableName)
+		catalystApp.zcql().executeZCQLQuery("select " + columnName + " from " + tableName + " where " + columnName + " IS 'numberOfViews'")
 			.then(queryResponse => {
 				console.log(queryResponse);
 				resolve(queryResponse);
