@@ -46,6 +46,7 @@ module.exports = async (req, res) => {
 };
 
 function incrementVisitors(catalystApp, numberOfVisitorsData) {
+	console.log(numberOfVisitorsData);
 	let updatedRowData = {
         'ROWID': numberOfVisitorsData.rowId,
 		'param_value': 1 + Number(numberOfVisitorsData.value) 
