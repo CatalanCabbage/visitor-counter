@@ -5,6 +5,7 @@ module.exports = (req, res) => {
 	let urlObject = new URL(req.url, `http://${req.host}`);
 	let path = urlObject.pathname;
 	let method = req.method;
+	let queryParams = urlObject.searchParams;
 	let errorMessages = {
 		404 : 'URL not found'
 	}
@@ -18,9 +19,9 @@ module.exports = (req, res) => {
 		res.end();
 		return;
 	} else if (path === '/visitors' && method === 'PUT') {
-		let secretKey = req.query.secretKey;
+		let secretKey = queryParams.get('secretKey');
 		if (secretKey === 'sudo') {
-			let newCount = req.query.newCount;
+			let newCount = queryParams.get('newCount');
 			numberOfVisitors = newCount;
 			res.writeHead(200, { 'Content-Type': 'application/json' });
 			res.write(JSON.stringify({
@@ -35,7 +36,8 @@ module.exports = (req, res) => {
 	res.write( JSON.stringify({ 
 		'status' : errorMessages[404], 
 		'path' : path, 
-		'method' : method		
+		'method' : method,
+		'queryParams' : queryParams	
 	}));
 	res.end();
 };
