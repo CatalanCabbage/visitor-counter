@@ -1,11 +1,11 @@
 'use strict';
 
+let numberOfVisitors = 1;
 module.exports = (req, res) => {
 	var url = req.url;
 	let errorMessages = {
 		404 : 'URL not found'
 	}
-	let numberOfVisitors = 1;
 
 	if (url === '/visitors' && req.method === 'GET') {
 		incrementVisitors();
