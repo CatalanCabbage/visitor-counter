@@ -9,13 +9,13 @@ let catalyst = require('zcatalyst-sdk-node');
  */
 module.exports = async (req, res) => {
 	let catalystApp = catalyst.initialize(req);
-	
+
 	//Extract required URL data
 	let urlObject = new URL(req.url, `http://${req.host}`);
 	let path = urlObject.pathname;
 	let method = req.method;
 	let queryParams = urlObject.searchParams;
-	
+
 	let errorMessages = {
 		404: 'URL not found'
 	}
@@ -35,8 +35,8 @@ module.exports = async (req, res) => {
 		}));
 		res.end();
 		return;
-	} 
-	
+	}
+
 	/**
 	 * Spec: PUT /visitors?secretKey=xyz&newCount=123
 	 * Query params:
@@ -72,14 +72,14 @@ module.exports = async (req, res) => {
 function incrementVisitors(catalystApp, numberOfVisitorsData) {
 	let newVisitorCount = Number(numberOfVisitorsData.value) + 1;
 	let updatedRowData = {
-        'ROWID': numberOfVisitorsData.ROWID,
+		'ROWID': numberOfVisitorsData.ROWID,
 		'param_value': newVisitorCount
-    };
+	};
 
 	//Update the table with new visitors value
 	let datastore = catalystApp.datastore();
-    let table = datastore.table('systemParams');
-    let rowPromise = table.updateRow(updatedRowData);
+	let table = datastore.table('systemParams');
+	let rowPromise = table.updateRow(updatedRowData);
 	rowPromise.then((row) => {
 		console.log(row);
 	});
@@ -93,8 +93,8 @@ async function getNumberOfVisitors(catalystApp) {
 			.then(queryResponse => {
 				console.log(queryResponse);
 				resolve({
-					'value' : queryResponse[0].systemParams.param_value,
-					'ROWID' : queryResponse[0].systemParams.ROWID
+					'value': queryResponse[0].systemParams.param_value,
+					'ROWID': queryResponse[0].systemParams.ROWID
 				});
 			}).catch(err => {
 				reject(err);
