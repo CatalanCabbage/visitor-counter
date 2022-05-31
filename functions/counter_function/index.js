@@ -41,7 +41,7 @@ module.exports = async (req, res) => {
 	 * Spec: PUT /visitors?secretKey=xyz&newCount=123
 	 * Query params:
 	 * 	secretKey: Psuedo-authentication.
-	 *  newCount: count.
+	 *	newCount: count.
 	 * 
 	 * API to set the number of visitors, used to set the initial value.
 	 */
