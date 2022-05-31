@@ -2,16 +2,29 @@
 
 let catalyst = require('zcatalyst-sdk-node');
 
+/*
+ * TODO: 
+ * Review and add Catalyst user authentication for the PUT method
+ * Error handling, logging
+ */
 module.exports = async (req, res) => {
 	let catalystApp = catalyst.initialize(req);
+	
+	//Extract required URL data
 	let urlObject = new URL(req.url, `http://${req.host}`);
 	let path = urlObject.pathname;
 	let method = req.method;
 	let queryParams = urlObject.searchParams;
+	
 	let errorMessages = {
 		404: 'URL not found'
 	}
 
+	/**
+	 * Spec: GET /visitors
+	 * 
+	 * Returns the number of visitors and increments count by 1.
+	 */
 	if (path === '/visitors' && method === 'GET') {
 		let numberOfVisitorsData = await getNumberOfVisitors(catalystApp);
 		let numberOfVisitors = numberOfVisitorsData.value;
@@ -22,7 +35,17 @@ module.exports = async (req, res) => {
 		}));
 		res.end();
 		return;
-	} else if (path === '/visitors' && method === 'PUT') {
+	} 
+	
+	/**
+	 * Spec: PUT /visitors?secretKey=xyz&newCount=123
+	 * Query params:
+	 * 	secretKey: Psuedo-authentication.
+	 *  newCount: count.
+	 * 
+	 * API to set the number of visitors, used to set the initial value.
+	 */
+	if (path === '/visitors' && method === 'PUT') {
 		let secretKey = queryParams.get('secretKey');
 		if (secretKey === 'sudo') {
 			let newCount = queryParams.get('newCount');
@@ -36,6 +59,7 @@ module.exports = async (req, res) => {
 		}
 	}
 
+	//Default response for any unknown request
 	res.writeHead(404, { 'Content-Type': 'application/json' });
 	res.write(JSON.stringify({
 		'status': errorMessages[404],
@@ -46,13 +70,13 @@ module.exports = async (req, res) => {
 };
 
 function incrementVisitors(catalystApp, numberOfVisitorsData) {
-	console.log(numberOfVisitorsData.ROWID);
 	let newVisitorCount = Number(numberOfVisitorsData.value) + 1;
 	let updatedRowData = {
         'ROWID': numberOfVisitorsData.ROWID,
 		'param_value': newVisitorCount
     };
 
+	//Update the table with new visitors value
 	let datastore = catalystApp.datastore();
     let table = datastore.table('systemParams');
     let rowPromise = table.updateRow(updatedRowData);
@@ -64,9 +88,7 @@ function incrementVisitors(catalystApp, numberOfVisitorsData) {
 
 async function getNumberOfVisitors(catalystApp) {
 	return new Promise((resolve, reject) => {
-		let tableName = 'systemParams';
-		let columnName = 'param_key';
-		// Queries the Catalyst Data Store table
+		//Query the Catalyst Data Store table
 		catalystApp.zcql().executeZCQLQuery("SELECT ROWID, param_key, param_value FROM systemParams WHERE param_key='numberOfViews'")
 			.then(queryResponse => {
 				console.log(queryResponse);
@@ -79,14 +101,3 @@ async function getNumberOfVisitors(catalystApp) {
 			})
 	});
 }
-
-// // Queries the Catalyst Data Store table and checks whether a row is present
-// getNumberOfVisitors(catalystApp).then(data => {
-// 	if (data.length == 0) {
-// 		return 0;
-// 	} else {
-// 		return 100;
-// 	}
-// }).catch(err => {
-// 	return null;
-// });
