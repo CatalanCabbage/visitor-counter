@@ -4,7 +4,6 @@ let catalyst = require('zcatalyst-sdk-node');
 
 /*
  * TODO: 
- * Review and add Catalyst user authentication for the PUT method
  * Error handling, logging
  */
 module.exports = async (req, res) => {
@@ -35,28 +34,6 @@ module.exports = async (req, res) => {
 		}));
 		res.end();
 		return;
-	}
-
-	/**
-	 * Spec: PUT /visitors?secretKey=xyz&newCount=123
-	 * Query params:
-	 * 	secretKey: Psuedo-authentication.
-	 *	newCount: count.
-	 * 
-	 * API to set the number of visitors, used to set the initial value.
-	 */
-	if (path === '/visitors' && method === 'PUT') {
-		let secretKey = queryParams.get('secretKey');
-		if (secretKey === 'sudo') {
-			let newCount = queryParams.get('newCount');
-			numberOfVisitors = newCount;
-			res.writeHead(200, { 'Content-Type': 'application/json' });
-			res.write(JSON.stringify({
-				'visitors': numberOfVisitors
-			}));
-			res.end();
-			return;
-		}
 	}
 
 	//Default response for any unknown request
